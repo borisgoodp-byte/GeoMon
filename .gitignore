@@ -1,0 +1,40 @@
+# Dependencies and generated files
+node_modules/
+dist/
+build/
+coverage/
+.nyc_output/
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local database runtime, data, and exports
+/mariadb/
+/mariadb-data/
+/mariadb.zip
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+!/kimi-agent-platform/app/db/migrations/*.sql
+
+# Logs, local backups, and editor files
+*.log
+*.bak
+*.tmp
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

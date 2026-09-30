@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>GeoMon 自动登录</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; }
+    #msg { color: #334155; font-size: 15px; }
+  </style>
+</head>
+<body>
+  <div id="msg">正在登录 GeoMon…</div>
+  <script>
+    // 支持 ?u=zhanglai|chenyun|hanhoo 切换账号，默认 admin
+    var qs = new URLSearchParams(location.search);
+    var u = qs.get('u') || 'zhanglai';
+    var p = qs.get('p') || 'GeoMon@2026';
+    fetch('/api/trpc/auth.login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ json: { username: u, password: p } })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var data = d && d.result && d.result.data && d.result.data.json;
+        if (!data || !data.token) {
+          var msg = (d && d.error && d.error.json && d.error.json.message) || '登录接口返回异常';
+          throw new Error(msg);
+        }
+        localStorage.setItem('geomon_token', data.token);
+        localStorage.setItem('geomon_user', JSON.stringify(data.user));
+        location.replace('/');
+      })
+      .catch(function (e) {
+        document.getElementById('msg').textContent = '登录失败：' + e.message;
+      });
+  </script>
+</body>
+</html>
